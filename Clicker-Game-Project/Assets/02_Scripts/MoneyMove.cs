@@ -17,6 +17,7 @@ public class MoneyMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // 아이콘과 텍스트가 좌측상단 방향으로 이동하다 사라짐
         transform.Translate(moneyMove * Time.deltaTime);
         GetComponent<SpriteRenderer>().color -= moneyColor * Time.deltaTime;
         transform.Find("Canvas").Find("Text").GetComponent<Text>().color -= moneyColor * Time.deltaTime;
