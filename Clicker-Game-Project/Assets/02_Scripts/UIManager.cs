@@ -21,7 +21,7 @@ public class UIManager : MonoBehaviour
     {
         // boss위치
         screenWdithHalf = Camera.main.orthographicSize * Camera.main.aspect;
-        currentEmployeePos = new Vector2(-(screenWdithHalf / 2), 1f);
+        currentEmployeePos = new Vector2(-(screenWdithHalf / 2f), 1f);
 
         //textPrice = panelPrice.transform.Find("Text").GetComponent<Text>();
         gm = GameManager.Instance;
@@ -106,9 +106,21 @@ public class UIManager : MonoBehaviour
 
             // 직원 위치
             Vector2 employeePos = currentEmployeePos;
-            employeePos.x += screenWdithHalf / 2f;
+
+            if(gm.GetEmployeeCount() % 3 == 0)
+            {
+                employeePos.x = -(screenWdithHalf / 2f);
+                employeePos.y -= 2f;
+            }
+            else
+            {
+                employeePos.x += (screenWdithHalf / 2f);
+            }
+
+
             Instantiate(employee, employeePos, transform.rotation);
             currentEmployeePos = employeePos;
+            Debug.Log(employeePos);
         }
     }
 
