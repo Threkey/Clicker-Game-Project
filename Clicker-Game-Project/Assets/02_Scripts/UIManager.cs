@@ -6,9 +6,10 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     GameManager gm;
-
+    /*
     public Vector2 bossPos;
     public Vector2 employeePos;
+    */
     public int width = 3;
     //float screenWdithHalf;
 
@@ -22,7 +23,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         // boss위치
-        bossPos = GameObject.Find("Boss").transform.position;
+        //bossPos = GameObject.Find("Boss").transform.position;
         //screenWdithHalf = Camera.main.orthographicSize * Camera.main.aspect;
 
         //textPrice = panelPrice.transform.Find("Text").GetComponent<Text>();
@@ -107,7 +108,7 @@ public class UIManager : MonoBehaviour
             //gm.SetUpgradePrice(gm.GetMoneyIncreaseLevel() * 1000);
 
             // 직원 위치
-            employeePos = new Vector2(bossPos.x + 2f * (float)(gm.GetEmployeeCount() % width), 1f - (float)(gm.GetEmployeeCount() / width * 2)) ;
+            gm.employeePos = new Vector2(gm.bossPos.x + 2f * (float)(gm.GetEmployeeCount() % width), 1f - (float)(gm.GetEmployeeCount() / width * 2)) ;
 
             /*
             if(gm.GetEmployeeCount() % 3 == 0)
@@ -124,9 +125,9 @@ public class UIManager : MonoBehaviour
             // 랜덤 1/4 확률로 superEmplyee 생성
             int rnad = Random.Range(0, 4);
             if(rnad == 0)
-                Instantiate(superEmployee, employeePos, transform.rotation);
+                Instantiate(superEmployee, gm.employeePos, transform.rotation);
             else
-                Instantiate(employee, employeePos, transform.rotation);
+                Instantiate(employee, gm.employeePos, transform.rotation);
 
             //currentEmployeePos = employeePos;
         }

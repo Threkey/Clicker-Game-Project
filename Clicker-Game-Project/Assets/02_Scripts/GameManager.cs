@@ -10,6 +10,10 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public Animator anim;
     public GameObject moneyIcon;
+    public GameObject employee, boss;
+    public Vector2 bossPos;
+    public Vector2 employeePos;
+
     UIManager uiManager;
 
     public GameObject floor;
@@ -49,6 +53,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        bossPos = boss.transform.position;
         
         string path = Application.persistentDataPath + "/save.xml";
         if (System.IO.File.Exists(path))
@@ -124,11 +129,13 @@ public class GameManager : MonoBehaviour
 
     public void SpawnFloor()
     {
-
+        if(employeePos.x == bossPos.x && employeePos.y < bottomY + employeeSize.y * employeeScale / 2f)
+        {
+            Debug.Log("floor");
             Vector2 floorSpawnPos = new Vector2(0f, bottomY - (floorSize.y / 2f) * floorScale);
             Instantiate(floor, floorSpawnPos, Quaternion.identity);
-            bottomY = floorSpawnPos.y - (floorSize.y / 2f) * floorScale ;
-
+            bottomY = floorSpawnPos.y - (floorSize.y / 2f) * floorScale;
+        }
 
     }
 
@@ -179,13 +186,10 @@ public class GameManager : MonoBehaviour
 
     void FillEmployee()
     {
-        for(int i = 0; i < employeeCount; i++)
+        for(int i = 1; i <= employeeCount; i++)
         {
-            int rnad = UnityEngine.Random.Range(0, 4);
-            if (rnad == 0)
-                Instantiate(uiManager.superEmployee, uiManager.employeePos, transform.rotation);
-            else
-                Instantiate(uiManager.employee, uiManager.employeePos, transform.rotation);
+            employeePos = new Vector2(bossPos.x + 2f * (float)(i % 3), bossPos.y - (float)(i / 3 * 2));
+            Instantiate(employee, employeePos, transform.rotation);
         }
     }
 
