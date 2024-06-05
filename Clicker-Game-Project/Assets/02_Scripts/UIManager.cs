@@ -7,11 +7,13 @@ public class UIManager : MonoBehaviour
 {
     GameManager gm;
 
-    Vector2 currentEmployeePos;
-
-    float screenWdithHalf;
+    public Vector2 bossPos;
+    public Vector2 employeePos;
+    public int width = 3;
+    //float screenWdithHalf;
 
     public GameObject employee;
+    public GameObject superEmployee;
 
     public Button btnPrice, btnPriceUpgrade, btnPriceBack, btnRecruit, btnRecruitUpgrade, btnRecruitBack;
     public GameObject panelPrice, panelRecruit;
@@ -20,8 +22,8 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         // boss위치
-        screenWdithHalf = Camera.main.orthographicSize * Camera.main.aspect;
-        currentEmployeePos = new Vector2(-(screenWdithHalf / 2f), 1f);
+        bossPos = GameObject.Find("Boss").transform.position;
+        //screenWdithHalf = Camera.main.orthographicSize * Camera.main.aspect;
 
         //textPrice = panelPrice.transform.Find("Text").GetComponent<Text>();
         gm = GameManager.Instance;
@@ -95,7 +97,7 @@ public class UIManager : MonoBehaviour
         panelRecruit.SetActive(false);
     }
 
-    void RecruitUpgrade()
+    public void RecruitUpgrade()
     {
         if (gm.GetMoney() >= gm.GetRecruitPrice())
         {
@@ -105,8 +107,9 @@ public class UIManager : MonoBehaviour
             //gm.SetUpgradePrice(gm.GetMoneyIncreaseLevel() * 1000);
 
             // 직원 위치
-            Vector2 employeePos = currentEmployeePos;
+            employeePos = new Vector2(bossPos.x + 2f * (float)(gm.GetEmployeeCount() % width), 1f - (float)(gm.GetEmployeeCount() / width * 2)) ;
 
+            /*
             if(gm.GetEmployeeCount() % 3 == 0)
             {
                 employeePos.x = -(screenWdithHalf / 2f);
@@ -116,11 +119,16 @@ public class UIManager : MonoBehaviour
             {
                 employeePos.x += (screenWdithHalf / 2f);
             }
+            */
 
+            // 랜덤 1/4 확률로 superEmplyee 생성
+            int rnad = Random.Range(0, 4);
+            if(rnad == 0)
+                Instantiate(superEmployee, employeePos, transform.rotation);
+            else
+                Instantiate(employee, employeePos, transform.rotation);
 
-            Instantiate(employee, employeePos, transform.rotation);
-            currentEmployeePos = employeePos;
-            Debug.Log(employeePos);
+            //currentEmployeePos = employeePos;
         }
     }
 

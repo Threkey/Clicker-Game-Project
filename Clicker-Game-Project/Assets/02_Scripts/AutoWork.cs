@@ -35,8 +35,16 @@ public class AutoWork : MonoBehaviour
         timer += Time.deltaTime;
         if( timer > earnMoneyTimeInterval )
         {
-            //money += moneyIncreaseAmountE * employeeCount;
-            gm.AddMoney(gm.GetMoneyIncreaseAmountE());
+            if(tag == "Employee")
+            {
+                //money += moneyIncreaseAmountE * employeeCount;
+                gm.AddMoney(gm.GetMoneyIncreaseAmountE());
+            }
+            else if(tag == "SuperEmployee")
+            {
+                gm.AddMoney(gm.GetMoneyIncreaseAmountSE());
+            }
+
 
             timer = 0f;
         }
