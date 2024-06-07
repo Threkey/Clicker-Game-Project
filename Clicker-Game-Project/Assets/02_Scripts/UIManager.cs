@@ -16,8 +16,8 @@ public class UIManager : MonoBehaviour
     public GameObject employee;
     public GameObject superEmployee;
 
-    public Button btnPrice, btnPriceUpgrade, btnPriceBack, btnRecruit, btnRecruitUpgrade, btnRecruitBack;
-    public GameObject panelPrice, panelRecruit;
+    public Button btnPrice, btnPriceUpgrade, btnPriceBack, btnRecruit, btnRecruitUpgrade, btnRecruitBack, btnOption, btnOptionBack;
+    public GameObject panelPrice, panelRecruit, panelOption;
     public Text textPrice, textRecruit;
     // Start is called before the first frame update
     void Start()
@@ -35,6 +35,9 @@ public class UIManager : MonoBehaviour
         btnRecruit.onClick.AddListener(PopUpRecruitUpgradeUI);
         btnRecruitUpgrade.onClick.AddListener(RecruitUpgrade);
         btnRecruitBack.onClick.AddListener(CloseRecruitUI);
+
+        btnOption.onClick.AddListener(PopUpOptionUI);
+        btnOptionBack.onClick.AddListener(CloseOptionUI);
     }
 
     // Update is called once per frame
@@ -45,6 +48,16 @@ public class UIManager : MonoBehaviour
 
         UpdateUpgradePanel();
         UpdateRecruitPanel();
+    }
+
+    void PopUpOptionUI()
+    {
+        panelOption.SetActive(true);
+    }
+
+    void CloseOptionUI()
+    {
+        panelOption.SetActive(false);
     }
 
     void PopUpPriceUpgradeUI()
@@ -125,7 +138,11 @@ public class UIManager : MonoBehaviour
             // ·£´ý 1/4 È®·ü·Î superEmplyee »ý¼º
             int rnad = Random.Range(0, 4);
             if(rnad == 0)
+            {
                 Instantiate(superEmployee, gm.employeePos, transform.rotation);
+                gm.AddSuperEmployeeCount(1);
+            }
+
             else
                 Instantiate(employee, gm.employeePos, transform.rotation);
 

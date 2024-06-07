@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public Animator anim;
     public GameObject moneyIcon;
-    public GameObject employee, boss;
+    public GameObject employee, superEmployee, boss;
     public Vector2 bossPos;
     public Vector2 employeePos;
 
@@ -32,11 +32,17 @@ public class GameManager : MonoBehaviour
 
     // 고용 관련 변수
     private int employeeCount = 0;
+    private int superEmployeeCount = 0;
     private long recruitPrice = 5000;
     private long moneyIncreaseAmountE = 50;
     private long moneyIncreaseAmountSE = 100;
 
     private Text textMoney, textEmployee;
+
+    AudioSource audioSource;
+
+    public Slider slider_bgm;
+    public Toggle toggle_mute;
     // Start is called before the first frame update
 
     private void Awake()
@@ -53,6 +59,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+
         bossPos = boss.transform.position;
         
         string path = Application.persistentDataPath + "/save.xml";
@@ -61,7 +69,6 @@ public class GameManager : MonoBehaviour
             Load();
             FillEmployee();
         }
-        
 
         //string moneyString = PlayerPrefs.GetString("MONEY");
         //money = long.Parse(moneyString);
@@ -102,6 +109,17 @@ public class GameManager : MonoBehaviour
         }
     }
     */
+
+    public void ChangeBgmSound()
+    {
+        audioSource.volume = slider_bgm.value;
+    }
+
+    public void ChangeMute()
+    {
+        audioSource.mute = toggle_mute.isOn;
+    }
+
 
     public void ShowInfo()
     {
@@ -156,6 +174,7 @@ public class GameManager : MonoBehaviour
         saveData.moneyIncreaseAmount = moneyIncreaseAmount;
         saveData.recruitPrice = recruitPrice;
         saveData.employeeCount = employeeCount;
+        saveData.superEmployeeCount = superEmployeeCount;
         saveData.moneyIncreaseAmountE = moneyIncreaseAmountE;
         saveData.moneyIncreaseAmountSE = moneyIncreaseAmountSE;
         saveData.bottomY = bottomY;
@@ -180,16 +199,23 @@ public class GameManager : MonoBehaviour
         moneyIncreaseAmountSE = saveData.moneyIncreaseAmountSE;
         recruitPrice = saveData.recruitPrice;
         employeeCount = saveData.employeeCount;
+        superEmployeeCount = saveData.superEmployeeCount;
         bottomY = saveData.bottomY;
 
     }
 
     void FillEmployee()
     {
-        for(int i = 1; i <= employeeCount; i++)
+        int i = 1;
+        for( ; i <= employeeCount - superEmployeeCount; i++)
         {
             employeePos = new Vector2(bossPos.x + 2f * (float)(i % 3), bossPos.y - (float)(i / 3 * 2));
             Instantiate(employee, employeePos, transform.rotation);
+        }
+        for( ; i <= employeeCount; i++)
+        {
+            employeePos = new Vector2(bossPos.x + 2f * (float)(i % 3), bossPos.y - (float)(i / 3 * 2));
+            Instantiate(superEmployee, employeePos, transform.rotation);
         }
     }
 
@@ -215,6 +241,11 @@ public class GameManager : MonoBehaviour
     public void AddEmployeeCount(int count)
     {
         this.employeeCount += count;
+    }
+
+    public void AddSuperEmployeeCount(int count)
+    {
+        this.superEmployeeCount += count;
     }
 
 
@@ -249,6 +280,11 @@ public class GameManager : MonoBehaviour
     public int GetEmployeeCount()
     {
         return employeeCount;
+    }
+
+    public int GetSuperEmployeeCount()
+    {
+        return superEmployeeCount;
     }
 
     public long GetMoneyIncreaseAmountE()
@@ -294,6 +330,7 @@ public class SaveData
     public long moneyIncreaseAmount;
     public long recruitPrice;
     public int employeeCount;
+    public int superEmployeeCount;
     public long moneyIncreaseAmountE;
     public long moneyIncreaseAmountSE;
     public float bottomY;
